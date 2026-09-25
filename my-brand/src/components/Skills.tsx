@@ -1,19 +1,30 @@
+interface CircularProgressProps {
+  percentage: number;
+  size?: number;
+  strokeWidth?: number;
+}
+
+interface Skill {
+  name: string;
+  percentage: number;
+}
+
 export default function Skills() {
-  const programmingLanguages = [
+  const programmingLanguages: Skill[] = [
     { name: "JavaScript", percentage: 95 },
     { name: "Python", percentage: 95 },
     { name: "HTML", percentage: 95 },
-    { name: "C++", percentage: 85 },
+    { name: "Node Js", percentage: 85 },
   ];
 
-  const databasesCloud = [
+  const databasesCloud: Skill[] = [
     { name: "MongoDB", percentage: 80 },
     { name: "PostgreSQL", percentage: 80 },
     { name: "AWS", percentage: 75 },
     { name: "Firebase", percentage: 80 },
   ];
 
-  const webTechnologies = [
+  const webTechnologies: Skill[] = [
     { name: "React", percentage: 90 },
     { name: "Node.js", percentage: 85 },
     { name: "Tailwind CSS", percentage: 90 },
@@ -21,7 +32,11 @@ export default function Skills() {
   ];
 
   // Circle progress component
-  const CircularProgress = ({ percentage, size = 80, strokeWidth = 6 }) => {
+  const CircularProgress = ({
+    percentage,
+    size = 80,
+    strokeWidth = 6,
+  }: CircularProgressProps) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = circumference - (percentage / 100) * circumference;
@@ -63,7 +78,7 @@ export default function Skills() {
     <section id="skills" className="bg-[#0D1B2A] text-white px-6 md:px-10 py-16">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Techinical <span className="text-cyan-400">Skills </span>
+          Technical <span className="text-cyan-400">Skills </span>
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8">

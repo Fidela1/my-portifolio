@@ -18,12 +18,17 @@ export default function Hero() {
             </p>
 
             <div className="flex gap-4 flex-wrap">
-              <button className="bg-cyan-500 px-5 py-2 rounded hover:bg-cyan-400">
+                <a 
+                href="#projects"
+                className="bg-cyan-500 px-5 py-2 rounded hover:bg-cyan-400 transition-colors inline-block"
+              >
                 View my work
-              </button>
-              <button className="border border-cyan-500 px-5 py-2 rounded hover:bg-cyan-500">
+              </a>
+              <a 
+              href="#contact"
+              className="border border-cyan-500 px-5 py-2 rounded hover:bg-cyan-500">
                 Contact me
-              </button>
+              </a>
             </div>
           </div>
 

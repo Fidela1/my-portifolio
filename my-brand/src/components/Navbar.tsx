@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaDownload } from "react-icons/fa";
-import cvFile from "../assets/cv.pdf"; // Import CV from assets
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,44 +8,17 @@ export default function Navbar() {
 
   const links = ["home", "about", "skills", "services", "projects", "contact"];
 
-  // Handle download CV with multiple methods
-  const handleDownloadCV = async () => {
-    try {
-      // Method 1: Try to fetch and download
-      const response = await fetch(cvFile);
-      const blob = await response.blob();
-      
-      // Create a blob URL
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "Fidela_CV.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download failed, trying alternative method:", error);
-      
-      // Method 2: Try direct link
-      const link = document.createElement("a");
-      link.href = cvFile;
-      link.download = "Fidela_CV.pdf";
-      link.target = "_blank";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+  const handleDownloadCV = () => {
+    const cvUrl = "src/assets/Fidela_Tuyizere_CV.pdf";
+    
+    const link = document.createElement("a");
+    link.href = cvUrl;
+    link.download = "Fidela_Tuyizere_CV.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  // Alternative: Open in new tab (most reliable)
-  const handleViewCV = () => {
-    window.open(cvFile, '_blank');
-  };
-
-  // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
       const sections = links.map(link => document.getElementById(link));
@@ -107,7 +79,7 @@ export default function Navbar() {
         
         {/* Logo */}
         <a href="#home" className="text-xl font-bold text-cyan-400 hover:text-cyan-300 transition-colors">
-          MyPortfolio
+          Fidela
         </a>
 
         {/* Desktop Menu */}

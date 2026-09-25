@@ -7,15 +7,15 @@ export default function About() {
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-center">
      
-          <div className="flex justify-center md:justify-start">
-            <div className="w-64 md:w-72 border-2 border-cyan-400 rounded-lg overflow-hidden">
-              <img
-                src="src/assets/about.jpeg"
-                alt="profile"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
+          <div className="hidden md:flex justify-center md:justify-start">
+  <div className="w-64 md:w-72 border-2 border-cyan-400 rounded-lg overflow-hidden">
+    <img
+      src="src/assets/about.jpeg"
+      alt="profile"
+      className="w-full h-full object-cover"
+    />
+  </div>
+</div>
           <div>
             <h3 className="font-bold text-2xl mb-4">
               About <span className="text-cyan-400">Me</span>
