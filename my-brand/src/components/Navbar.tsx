@@ -6,11 +6,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  const links = ["home", "about", "skills", "services", "projects", "contact"];
+  // Changed "Services" to "Experience"
+  const links = ["home", "about", "skills", "experience", "projects", "contact"];
 
   const handleDownloadCV = () => {
     const cvUrl = "src/assets/Fidela_Tuyizere_CV.pdf";
-    
     const link = document.createElement("a");
     link.href = cvUrl;
     link.download = "Fidela_Tuyizere_CV.pdf";
@@ -22,7 +22,6 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = links.map(link => document.getElementById(link));
-      
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section) {
@@ -34,14 +33,12 @@ export default function Navbar() {
         }
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     handleScroll();
-    
     return () => window.removeEventListener("scroll", handleScroll);
   }, [links]);
 
-  const handleLinkClick = (link: string) => {
+  const handleLinkClick = (link) => {
     setMenuOpen(false);
     setActiveSection(link);
     const element = document.getElementById(link);
@@ -50,92 +47,96 @@ export default function Navbar() {
     }
   };
 
-  // Close menu on escape key
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && menuOpen) {
-        setMenuOpen(false);
-      }
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && menuOpen) setMenuOpen(false);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [menuOpen]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    if (menuOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
   }, [menuOpen]);
 
   return (
     <>
-      <nav className="bg-[#0a192f]/90 backdrop-blur-md text-white px-6 md:px-23 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-gray-800">
+      <nav className="bg-[#0a192f]/90 backdrop-blur-md text-white sticky top-0 z-50 border-b border-gray-800">
         
-        {/* Logo */}
-        <a href="#home" className="text-xl font-bold text-cyan-400 hover:text-cyan-300 transition-colors">
-          Fidela
-        </a>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-4 flex justify-between items-center w-full">
+          
+          {/* Clean Logo */}
+          <a href="#home" className="group flex items-center gap-3 cursor-pointer shrink-0">
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 p-[2px] transition-transform duration-300 group-hover:scale-105">
+              <div className="flex items-center justify-center w-full h-full bg-[#0a192f] rounded-[10px]">
+                <span className="text-sm font-black text-transparent bg-clip-text bg-gradient-to-br from-cyan-400 to-blue-500 tracking-tighter">
+                  FT
+                </span>
+              </div>
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white leading-none group-hover:text-cyan-400 transition-colors flex gap-1.5">
+              Fidela <span className="text-white font-medium group-hover:text-cyan-400 transition-colors">Tuyizere</span>
+            </span>
+          </a>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-8 text-sm">
-          {links.map((link) => (
-            <li key={link}>
-              <a
-                href={`#${link}`}
-                className={`capitalize cursor-pointer transition-all relative group ${
-                  activeSection === link 
-                    ? "text-cyan-400 font-semibold" 
-                    : "text-white hover:text-cyan-400"
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLinkClick(link);
-                }}
-              >
-                {link}
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-cyan-400 transition-all ${
-                  activeSection === link ? "w-full" : "w-0 group-hover:w-full"
-                }`}></span>
-              </a>
-            </li>
-          ))}
-        </ul>
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex gap-8 text-sm">
+            {links.map((link) => (
+              <li key={link}>
+                <a
+                  href={`#${link}`}
+                  className={`capitalize cursor-pointer transition-all relative group ${
+                    activeSection === link 
+                      ? "text-cyan-400 font-semibold" 
+                      : "text-gray-300 hover:text-white"
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLinkClick(link);
+                  }}
+                >
+                  {link}
+                  <span className={`absolute -bottom-1 left-0 h-0.5 bg-cyan-400 transition-all ${
+                    activeSection === link ? "w-full" : "w-0 group-hover:w-full"
+                  }`}></span>
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        {/* Desktop Download Button */}
-        <button
-          onClick={handleDownloadCV}
-          className="hidden md:flex items-center gap-2 bg-purple-500 px-4 py-2 rounded text-sm hover:bg-purple-400 transition-all hover:scale-105"
-        >
-          <FaDownload className="w-3 h-3" />
-          Download CV
-        </button>
+          {/* Action Buttons Container */}
+          <div className="flex items-center gap-4 shrink-0">
+            {/* Desktop & Mobile Download Button (Cyan Outlined) */}
+            <button
+              onClick={handleDownloadCV}
+              className="flex items-center gap-2 border border-cyan-500 text-cyan-400 px-4 py-2 rounded-full text-sm font-medium hover:bg-cyan-500 hover:text-[#020c1b] transition-all duration-300"
+            >
+              <FaDownload className="w-3 h-3" />
+              <span className="hidden sm:inline">Download CV</span>
+            </button>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-2xl p-2 hover:bg-white/10 rounded-lg transition-colors relative z-50"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? <FiX /> : <FiMenu />}
-        </button>
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-2xl p-1 hover:bg-white/10 rounded-lg transition-colors relative z-50"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <FiX /> : <FiMenu />}
+            </button>
+          </div>
+
+        </div>
       </nav>
 
       {/* Mobile Menu Panel */}
       {menuOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
             onClick={() => setMenuOpen(false)}
           />
-          
-          {/* Mobile Menu Panel */}
           <div className="fixed top-[65px] right-0 w-80 bg-gradient-to-b from-[#0a192f] to-[#061224] border-l border-t border-gray-800 rounded-l-2xl shadow-2xl z-40 md:hidden animate-slideIn">
             <div className="flex flex-col py-6">
               {links.map((link) => (
@@ -155,17 +156,6 @@ export default function Navbar() {
                   {link}
                 </a>
               ))}
-              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-3 mx-4"></div>
-              <button
-                onClick={() => {
-                  handleDownloadCV();
-                  setMenuOpen(false);
-                }}
-                className="flex items-center justify-center gap-2 bg-purple-500 mx-4 mt-2 px-4 py-2.5 rounded-lg text-sm hover:bg-purple-400 transition-all hover:scale-105"
-              >
-                <FaDownload className="w-3 h-3" />
-                Download CV
-              </button>
             </div>
           </div>
         </>
@@ -173,18 +163,10 @@ export default function Navbar() {
 
       <style>{`
         @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
         }
-        .animate-slideIn {
-          animation: slideIn 0.3s ease-out;
-        }
+        .animate-slideIn { animation: slideIn 0.3s ease-out; }
       `}</style>
     </>
   );
