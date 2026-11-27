@@ -1,9 +1,9 @@
-import React from "react";
-import {
-  FaGithub, FaLinkedinIn, FaArrowRight, FaNodeJs, FaGitAlt
+import React, { useEffect, useRef, useState } from "react";
+import { 
+  FaGithub, FaLinkedinIn, FaArrowRight, FaNodeJs, FaGitAlt 
 } from "react-icons/fa";
-import {
-  SiNextdotjs, SiTypescript, SiPostgresql, SiTailwindcss
+import { 
+  SiNextdotjs, SiTypescript, SiPostgresql, SiTailwindcss 
 } from "react-icons/si";
 import profileHero from "../assets/profile_hero.jpg";
 
@@ -17,8 +17,28 @@ const ORBIT_ICONS = [
 ];
 
 export default function Hero() {
+  const [isVisible, setIsVisible] = useState(false);
+  const heroRef = useRef(null);
+
+  // Use IntersectionObserver to trigger animations every time it comes into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 } // Trigger when 20% of the hero is visible
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={heroRef}
       id="home"
       className="relative bg-[#020c1b] text-white pt-28 pb-20 px-6 md:px-10 min-h-[calc(100vh-70px)] flex items-center overflow-hidden"
     >
@@ -27,8 +47,12 @@ export default function Hero() {
 
       <div className="max-w-6xl mx-auto w-full z-10 flex flex-col md:flex-row items-center justify-between gap-16 md:gap-8">
 
-        <div className="w-full md:w-[55%] flex flex-col items-start animate-fade-up">
-
+        {/* --- Left Side: Text & Buttons (Slides in from Left) --- */}
+        <div 
+          className={`w-full md:w-[55%] flex flex-col items-start transition-all duration-1000 ease-out ${
+            isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"
+          }`}
+        >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold tracking-wider text-xs uppercase">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -78,7 +102,7 @@ export default function Hero() {
                   <FaGithub size={18} />
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/tuyizere-fidela-04507b251/"
+                  href="https://linkedin.com/"
                   target="_blank"
                   rel="noreferrer"
                   aria-label="LinkedIn"
@@ -88,13 +112,15 @@ export default function Hero() {
                 </a>
               </div>
             </div>
-
-            
           </div>
         </div>
 
-        <div className="w-full md:w-[45%] relative flex justify-center items-center h-[400px] md:h-[500px]">
-
+        {/* --- Right Side: Image & Orbiting Tech Icons (Fades and scales in) --- */}
+        <div 
+          className={`w-full md:w-[45%] relative flex justify-center items-center h-[400px] md:h-[500px] transition-all duration-1000 delay-200 ease-out ${
+            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+          }`}
+        >
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[380px] md:h-[380px] bg-cyan-500/25 rounded-full blur-[80px]"></div>
 
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[380px] md:h-[380px] border border-cyan-500/20 rounded-full"></div>
@@ -109,11 +135,16 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-full shadow-[inset_0_0_30px_rgba(0,0,0,0.5)] pointer-events-none"></div>
           </div>
 
-          {ORBIT_ICONS.map(({ Icon, deg, color, glow, anim }) => (
+          {/* Orbit Icons (Animate in sequentially when visible) */}
+          {ORBIT_ICONS.map(({ Icon, deg, color, glow, anim }, index) => (
             <div
               key={deg}
-              className="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[380px] md:h-[380px] -ml-[150px] -mt-[150px] md:-ml-[190px] md:-mt-[190px] pointer-events-none"
-              style={{ transform: `rotate(${deg}deg)` }}
+              className="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[380px] md:h-[380px] -ml-[150px] -mt-[150px] md:-ml-[190px] md:-mt-[190px] pointer-events-none transition-all duration-700 ease-out"
+              style={{ 
+                transform: `rotate(${deg}deg)`,
+                opacity: isVisible ? 1 : 0,
+                transitionDelay: `${400 + (index * 100)}ms` // Staggered appearance for icons
+              }}
             >
               <div className="absolute top-0 left-0 w-full flex justify-center">
                 <div
@@ -127,7 +158,6 @@ export default function Hero() {
               </div>
             </div>
           ))}
-
         </div>
       </div>
 
@@ -144,16 +174,11 @@ export default function Hero() {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-5px); }
         }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
         .animate-float { animation: float 4s ease-in-out infinite; }
         .animate-float-delayed { animation: float-delayed 5s ease-in-out infinite; animation-delay: 2s; }
         .animate-bounce-slow { animation: bounce-slow 3.5s ease-in-out infinite; }
-        .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; }
         @media (prefers-reduced-motion: reduce) {
-          .animate-float, .animate-float-delayed, .animate-bounce-slow, .animate-fade-up { animation: none; }
+          .animate-float, .animate-float-delayed, .animate-bounce-slow { animation: none; }
         }
       `}</style>
     </section>
